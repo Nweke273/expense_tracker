@@ -17,8 +17,8 @@ class Expense {
       {required this.title,
       required this.amount,
       required this.date,
-      required this.category})
-      : id = uuid.v4();
+      required this.category});
+  // : id = uuid.v4();
 
   final String title;
   final double amount;
