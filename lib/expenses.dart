@@ -1,10 +1,9 @@
 import 'package:expense_tracker/models/expense.dart';
-import 'package:expense_tracker/models/expenses_list.dart';
+import 'package:expense_tracker/widgets/expenses/expense_list.dart';
 import 'package:flutter/material.dart';
 
 class Expenses extends StatefulWidget {
   const Expenses({super.key});
-
   @override
   State<Expenses> createState() {
     return _ExpensesState();
@@ -25,14 +24,26 @@ class _ExpensesState extends State<Expenses> {
         category: Category.subscription)
   ];
 
+  void _openAddExpenseOverlay() {
+    showModalBottomSheet(
+        context: context, builder: (ctx) => (const Text("Add an expense")));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: const Text('2024 Expense Tracker'),
+          actions: [
+            IconButton(
+                onPressed: _openAddExpenseOverlay, icon: const Icon(Icons.add)),
+          ],
+        ),
         body: Column(
-      children: [
-        const Text("My Expense Tracker2"),
-        Expanded(child: ExpensesList(expenses: _registeredExpenses))
-      ],
-    ));
+          children: [
+            const Text("My Expense Tracker2"),
+            Expanded(child: ExpenseList(expenses: _registeredExpenses))
+          ],
+        ));
   }
 }
