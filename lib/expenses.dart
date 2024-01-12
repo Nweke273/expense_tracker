@@ -12,18 +12,7 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
-  final List<Expense> _registeredExpenses = [
-    Expense(
-        title: 'Flutter Course',
-        amount: 5000,
-        date: DateTime.now(),
-        category: Category.course),
-    Expense(
-        title: 'Airtel Subscription',
-        amount: 3000,
-        date: DateTime.now(),
-        category: Category.subscription)
-  ];
+  final List<Expense> _registeredExpenses = [];
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
@@ -39,11 +28,38 @@ class _ExpensesState extends State<Expenses> {
   }
 
   void _removeExpense(Expense expense) {
-    _registeredExpenses.remove(expense);
+    final expensePosition = _registeredExpenses.indexOf(expense);
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      duration: const Duration(seconds: 3),
+      content: Text(expense.title + ' was deleted'),
+      action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(expensePosition, expense);
+            });
+          }),
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget expenseContent = const Center(
+        child: Text(
+      'No Record found',
+      style: TextStyle(fontWeight: FontWeight.bold),
+    ));
+
+    if (_registeredExpenses.isNotEmpty) {
+      expenseContent = ExpenseList(
+        expenses: _registeredExpenses,
+        onRemoveExpense: _removeExpense,
+      );
+    }
     return Scaffold(
         appBar: AppBar(
           title: const Text('2024 Expense Tracker'),
@@ -56,10 +72,8 @@ class _ExpensesState extends State<Expenses> {
           children: [
             const Text("My Expense Tracker2"),
             Expanded(
-                child: ExpenseList(
-              expenses: _registeredExpenses,
-              onRemoveExpense: _removeExpense,
-            ))
+              child: expenseContent,
+            ),
           ],
         ));
   }
