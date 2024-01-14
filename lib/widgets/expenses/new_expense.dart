@@ -1,3 +1,4 @@
+import 'package:expense_tracker/main.dart';
 import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
 
@@ -136,7 +137,12 @@ class _NewExpenseState extends State<NewExpense> {
                     });
                   }),
               const Spacer(),
-              TextButton(onPressed: closePop, child: const Text("Cancel")),
+              TextButton(
+                  onPressed: closePop,
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(color: kColorScheme.onPrimaryContainer),
+                  )),
               ElevatedButton(
                   onPressed: _submitExpenseDate, child: const Text('Save')),
             ],
